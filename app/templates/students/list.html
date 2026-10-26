@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Список студентов</h1>
+
+<a href="{{ url_for('students_ui.create_student') }}" class="btn-add">+ Добавить студента</a>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>ФИО</th>
+        <th>Электронная почта</th>
+        <th>Курс</th>
+        <th>Действия</th>
+    </tr>
+    {% for s in students %}
+    <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.fullName }}</td>
+        <td>{{ s.email }}</td>
+        <td>{{ s.year }}</td>
+        <td class="action-links">
+            <a href="{{ url_for('students_ui.student_status', sid=s.id) }}">Статус</a>
+            <span class="separator">|</span>
+            <a href="{{ url_for('students_ui.edit_student', sid=s.id) }}">Изменить</a>
+            <span class="separator">|</span>
+            <form action="{{ url_for('students_ui.delete_student', sid=s.id) }}" method="post">
+                <a href="#" onclick="this.parentNode.submit(); return false;">Удалить</a>
+            </form>
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" style="text-align: center; color: #888;">Нет данных.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

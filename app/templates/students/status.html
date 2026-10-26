@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Статус: {{ student.id }} — {{ student.fullName }}</h1>
+
+<h3>Запись на курс</h3>
+<form method="post" action="{{ url_for('students_ui.enroll', sid=student.id) }}">
+    {{ form.hidden_tag() }}
+    {{ form.courseId(placeholder="CS101") }}
+    {{ form.submit(class="btn-submit") }}
+</form>
+
+<h3>Записан на курсы ({{ courses|length }})</h3>
+{% if courses %}
+<table>
+    <tr><th>Код</th><th>Название</th><th>Кредиты</th><th>Действия</th></tr>
+    {% for c in courses %}
+    <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.title }}</td>
+        <td>{{ c.credits }}</td>
+        <td class="action-links">
+            <form class="inline" method="post" action="{{ url_for('students_ui.drop', sid=student.id, cid=c.id) }}">
+                <a href="#" onclick="this.parentNode.submit(); return false;">Отчислить</a>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p style="color: #888;">Студент пока не записан ни на один курс.</p>
+{% endif %}
+
+<p style="margin-top: 30px;">
+    <a href="{{ url_for('students_ui.list_students') }}" class="btn-cancel">← Назад к списку</a>
+</p>
+{% endblock %}
